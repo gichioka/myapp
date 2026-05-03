@@ -49,6 +49,11 @@ class User extends Authenticatable
             ->implode('');
     }
 
+    public function serverAccounts()
+    {
+        return $this->hasMany(ServerAccount::class);
+    }
+    
     public function toolUsages()
     {
         return $this->hasMany(ToolUsage::class);

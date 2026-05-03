@@ -109,5 +109,27 @@
             </div>
         </a>
 
+        {{-- ✅ サーバーアカウント管理カード --}}
+<a href="{{ route('server-accounts') }}" class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 block">
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+    
+    <div class="relative">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">サーバー管理</h3>
+            
+            <div class="p-2 bg-indigo-100 rounded-lg">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h4m0 0l-3-3m3 3l-3 3M5 7h14M5 11h14M5 15h6"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="text-3xl font-bold text-gray-900">→</div>
+
+        <p class="text-xs text-gray-500 mt-2">
+            SSH・DBなどのアカウント情報を管理
+        </p>
+    </div>
+</a>
     </div>
 </div>
