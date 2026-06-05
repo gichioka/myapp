@@ -1,314 +1,183 @@
-<div class="p-6 bg-gray-50 min-h-screen">
+<div class="p-6">
 
-    {{-- タイトル --}}
-    <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold mb-6">
+        PC在庫管理
+    </h1>
 
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                💻 PC資産管理
-            </h1>
+    {{-- 🔍 検索 --}}
+    <div class="mb-6 bg-white p-4 rounded-xl shadow-sm border">
 
-            <p class="text-gray-500 mt-1">
-                PCの利用者・在庫・スペックを管理
-            </p>
+        <div class="flex gap-2 items-center">
+
+            <div class="relative w-full">
+
+                <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
+
+                <input
+                    type="text"
+                    wire:model="search"
+                    wire:keydown.enter="$refresh"
+                    placeholder="品名・SKU・CPU・メモリで検索"
+                    class="w-full pl-10 pr-4 py-2 border rounded-lg
+                           focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+
+            </div>
+
+            <button
+                wire:click="$refresh"
+                class="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600
+                       text-white font-bold rounded-lg shadow
+                       hover:scale-105 transition"
+            >
+                検索
+            </button>
+
+        </div>
+
+        <div wire:loading wire:target="$refresh" class="text-sm text-gray-500 mt-2">
+            検索中...
         </div>
 
     </div>
 
-    {{-- 検索カード --}}
-    <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+    {{-- 📝 登録フォーム --}}
+    <div class="grid grid-cols-2 gap-4 mb-4">
 
-        <div class="flex items-center justify-between mb-4">
-
-            <h2 class="text-lg font-semibold">
-                🔍 検索
-            </h2>
-
-            <span class="text-sm text-gray-500">
-                検索結果 {{ $products->total() }} 件
-            </span>
-
-        </div>
-
-        <div class="relative">
-
-            <input
-                type="text"
-                wire:model.live.debounce.300ms="search"
-                placeholder="品名・CPU・メモリで検索..."
-                class="w-full border border-gray-300 rounded-lg p-3 pl-10
-                       focus:ring-2 focus:ring-blue-500
-                       focus:border-blue-500"
-            >
-
-            <span class="absolute left-3 top-3.5 text-gray-400">
-                🔍
-            </span>
-
-        </div>
+        <input wire:model="name" type="text" placeholder="品名" class="border rounded p-2">
+        <input wire:model="brand" type="text" placeholder="ブランド" class="border rounded p-2">
+        <input wire:model="sku" type="text" placeholder="SKU" class="border rounded p-2">
+        <input wire:model="category" type="text" placeholder="カテゴリ" class="border rounded p-2">
+        <input wire:model="cpu" type="text" placeholder="CPU" class="border rounded p-2">
+        <input wire:model="ram" type="number" placeholder="メモリ(GB)" class="border rounded p-2">
+        <input wire:model="storage" type="text" placeholder="ストレージ" class="border rounded p-2">
+        <input wire:model="quantity" type="number" placeholder="在庫数" class="border rounded p-2">
+        <input wire:model="unit_price" type="number" placeholder="単価" class="border rounded p-2">
 
     </div>
 
-    {{-- 登録フォーム --}}
-    <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+    {{-- 🧑 使用者選択 --}}
+    <div class="mb-4">
 
-        <h2 class="text-lg font-semibold mb-4">
-            {{ $isEdit ? '✏️ PC編集' : '➕ PC登録' }}
-        </h2>
+        <label class="block text-sm font-semibold text-gray-600 mb-1">
+            使用者
+        </label>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <select
+            wire:model="user_id"
+            class="w-full border rounded p-2"
+        >
+            <option value="">未割当</option>
 
-            {{-- 利用者 --}}
-            <select
-                wire:model="user_id"
-                class="border rounded-lg p-3"
-            >
-                <option value="">
-                    利用者を選択
+            @foreach(\App\Models\User::orderBy('name')->get() as $user)
+                <option value="{{ $user->id }}">
+                    {{ $user->name }}
                 </option>
+            @endforeach
 
-                @foreach($users as $user)
-
-                    <option value="{{ $user->id }}">
-                        {{ $user->name }}
-                    </option>
-
-                @endforeach
-
-            </select>
-
-            {{-- 品名 --}}
-            <input
-                wire:model="name"
-                type="text"
-                placeholder="品名"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- ブランド --}}
-            <input
-                wire:model="brand"
-                type="text"
-                placeholder="ブランド"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- SKU --}}
-            <input
-                wire:model="sku"
-                type="text"
-                placeholder="管理番号(SKU)"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- カテゴリ --}}
-            <input
-                wire:model="category"
-                type="text"
-                placeholder="カテゴリ"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- CPU --}}
-            <input
-                wire:model="cpu"
-                type="text"
-                placeholder="CPU"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- RAM --}}
-            <input
-                wire:model="ram"
-                type="number"
-                placeholder="メモリ(GB)"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- ストレージ --}}
-            <input
-                wire:model="storage"
-                type="text"
-                placeholder="ストレージ"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- 在庫数 --}}
-            <input
-                wire:model="quantity"
-                type="number"
-                placeholder="在庫数"
-                class="border rounded-lg p-3"
-            >
-
-            {{-- 単価 --}}
-            <input
-                wire:model="unit_price"
-                type="number"
-                placeholder="単価"
-                class="border rounded-lg p-3"
-            >
-
-        </div>
-
-        <textarea
-            wire:model="description"
-            placeholder="備考"
-            rows="4"
-            class="w-full border rounded-lg p-3 mt-4"
-        ></textarea>
-
-        <div class="mt-4">
-
-            @if($isEdit)
-
-                <button
-                    wire:click="update"
-                    class="bg-blue-600 hover:bg-blue-700
-                           text-white px-6 py-2 rounded-lg"
-                >
-                    更新
-                </button>
-
-            @else
-
-                <button
-                    wire:click="save"
-                    class="bg-green-600 hover:bg-green-700
-                           text-white px-6 py-2 rounded-lg"
-                >
-                    登録
-                </button>
-
-            @endif
-
-        </div>
+        </select>
 
     </div>
 
-    {{-- 一覧カード --}}
-    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+    {{-- 備考 --}}
+    <textarea
+        wire:model="description"
+        placeholder="備考"
+        class="w-full border rounded p-2 mb-4"
+    ></textarea>
 
-        <div class="p-6 border-b">
+    {{-- ボタン --}}
+    @if($isEdit)
+        <button wire:click="update" class="bg-blue-600 text-white px-4 py-2 rounded">
+            更新
+        </button>
+    @else
+        <button wire:click="save" class="bg-green-600 text-white px-4 py-2 rounded">
+            登録
+        </button>
+    @endif
 
-            <h2 class="text-lg font-semibold">
-                📋 PC一覧
-            </h2>
+    <hr class="my-6">
 
-        </div>
+    {{-- 📋 一覧 --}}
+    <table class="w-full border-collapse border">
 
-        <div class="overflow-x-auto">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border p-2">品名</th>
+                <th class="border p-2">SKU</th>
+                <th class="border p-2">CPU</th>
+                <th class="border p-2">RAM</th>
+                <th class="border p-2">在庫</th>
+                <th class="border p-2">単価</th>
+                <th class="border p-2">備考</th>
+                <th class="border p-2">使用者</th>
+                <th class="border p-2">操作</th>
+            </tr>
+        </thead>
 
-            <table class="w-full">
+        <tbody>
 
-                <thead>
+        @forelse($products as $product)
 
-                    <tr class="bg-gray-100 text-left">
+            <tr>
 
-                        <th class="p-3 border-b">利用者</th>
-                        <th class="p-3 border-b">品名</th>
-                        <th class="p-3 border-b">ブランド</th>
-                        <th class="p-3 border-b">CPU</th>
-                        <th class="p-3 border-b">RAM</th>
-                        <th class="p-3 border-b">ストレージ</th>
-                        <th class="p-3 border-b">在庫</th>
-                        <th class="p-3 border-b">単価</th>
-                        <th class="p-3 border-b">操作</th>
+                <td class="border p-2">{{ $product->name }}</td>
+                <td class="border p-2">{{ $product->sku }}</td>
+                <td class="border p-2">{{ $product->cpu }}</td>
+                <td class="border p-2">{{ $product->ram }}GB</td>
 
-                    </tr>
+                <td class="border p-2 {{ $product->quantity == 0 ? 'text-red-500 font-bold' : '' }}">
+                    {{ $product->quantity }}
+                </td>
 
-                </thead>
+                <td class="border p-2">
+                    ¥{{ number_format($product->unit_price) }}
+                </td>
 
-                <tbody>
+                <td class="border p-2">
+                    {{ \Illuminate\Support\Str::limit($product->description, 20) ?? '-' }}
+                </td>
 
-                @forelse($products as $product)
+                <td class="border p-2">
+                    {{ $product->user->name ?? '未割当' }}
+                </td>
 
-                    <tr class="hover:bg-gray-50">
+                <td class="border p-2">
 
-                        <td class="p-3 border-b">
-                            {{ $product->user?->name ?? '未割当' }}
-                        </td>
+                    <button
+                        wire:click="edit({{ $product->id }})"
+                        class="bg-yellow-500 text-white px-2 py-1 rounded"
+                    >
+                        編集
+                    </button>
 
-                        <td class="p-3 border-b font-medium">
-                            {{ $product->name }}
-                        </td>
+                    <button
+                        wire:click="delete({{ $product->id }})"
+                        class="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                        削除
+                    </button>
 
-                        <td class="p-3 border-b">
-                            {{ $product->brand }}
-                        </td>
+                </td>
 
-                        <td class="p-3 border-b">
-                            {{ $product->cpu }}
-                        </td>
+            </tr>
 
-                        <td class="p-3 border-b">
-                            {{ $product->ram }}GB
-                        </td>
+        @empty
 
-                        <td class="p-3 border-b">
-                            {{ $product->storage }}
-                        </td>
+            <tr>
+                <td colspan="9" class="text-center p-4">
+                    データがありません
+                </td>
+            </tr>
 
-                        <td class="p-3 border-b">
-                            {{ $product->quantity }}
-                        </td>
+        @endforelse
 
-                        <td class="p-3 border-b">
-                            ¥{{ number_format($product->unit_price) }}
-                        </td>
+        </tbody>
 
-                        <td class="p-3 border-b">
+    </table>
 
-                            <div class="flex gap-2">
-
-                                <button
-                                    wire:click="edit({{ $product->id }})"
-                                    class="bg-yellow-500 hover:bg-yellow-600
-                                           text-white px-3 py-1 rounded"
-                                >
-                                    編集
-                                </button>
-
-                                <button
-                                    wire:click="delete({{ $product->id }})"
-                                    onclick="return confirm('削除しますか？')"
-                                    class="bg-red-500 hover:bg-red-600
-                                           text-white px-3 py-1 rounded"
-                                >
-                                    削除
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                @empty
-
-                    <tr>
-
-                        <td
-                            colspan="9"
-                            class="text-center p-8 text-gray-500"
-                        >
-                            データがありません
-                        </td>
-
-                    </tr>
-
-                @endforelse
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    {{-- ページネーション --}}
-    <div class="mt-6">
+    <div class="mt-4">
         {{ $products->links() }}
     </div>
 
