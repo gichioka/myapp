@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -59,6 +60,11 @@ class User extends Authenticatable
         return $this->hasMany(ToolUsage::class);
     }
     
+    public function products(): HasMany
+    {
+    return $this->hasMany(Product::class);
+    }
+
     public function integrations()
     {
     return $this->hasMany(Integration::class);
