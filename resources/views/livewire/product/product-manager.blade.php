@@ -52,11 +52,10 @@
         <input wire:model="ram" type="number" placeholder="メモリ(GB)" class="border rounded p-2">
         <input wire:model="storage" type="text" placeholder="ストレージ" class="border rounded p-2">
         <input wire:model="quantity" type="number" placeholder="在庫数" class="border rounded p-2">
-        <input wire:model="unit_price" type="number" placeholder="単価" class="border rounded p-2">
 
     </div>
 
-    {{-- 🧑 使用者選択 --}}
+    {{-- 🧑 使用者 --}}
     <div class="mb-4">
 
         <label class="block text-sm font-semibold text-gray-600 mb-1">
@@ -109,7 +108,6 @@
                 <th class="border p-2">CPU</th>
                 <th class="border p-2">RAM</th>
                 <th class="border p-2">在庫</th>
-                <th class="border p-2">単価</th>
                 <th class="border p-2">備考</th>
                 <th class="border p-2">使用者</th>
                 <th class="border p-2">操作</th>
@@ -129,10 +127,6 @@
 
                 <td class="border p-2 {{ $product->quantity == 0 ? 'text-red-500 font-bold' : '' }}">
                     {{ $product->quantity }}
-                </td>
-
-                <td class="border p-2">
-                    ¥{{ number_format($product->unit_price) }}
                 </td>
 
                 <td class="border p-2">
@@ -166,7 +160,7 @@
         @empty
 
             <tr>
-                <td colspan="9" class="text-center p-4">
+                <td colspan="8" class="text-center p-4">
                     データがありません
                 </td>
             </tr>

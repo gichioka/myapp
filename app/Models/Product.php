@@ -17,16 +17,14 @@ class Product extends Model
         'ram',
         'storage',
         'quantity',
-        'unit_price',
         'description',
     ];
 
     protected function casts(): array
     {
         return [
-            'ram' => 'integer',
+            'ram'      => 'integer',
             'quantity' => 'integer',
-            'unit_price' => 'integer',
         ];
     }
 
