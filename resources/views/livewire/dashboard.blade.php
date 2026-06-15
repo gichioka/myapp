@@ -127,8 +127,82 @@
                 </p>
             </div>
         </div>
+        {{-- 入社予定者 --}}
+<div class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100"></div>
 
-        {{-- ユーザー管理 --}}
+    <div class="relative">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                入社予定者
+            </h3>
+            <div class="p-2 bg-purple-100 rounded-lg">🧑‍💼</div>
+        </div>
+
+        <div class="text-3xl font-bold text-gray-900">
+            {{ $newEmployees }}
+        </div>
+
+        <p class="text-xs text-gray-500 mt-2">
+            登録中の入社予定者
+        </p>
+    </div>
+</div>
+
+{{-- 入社予定 --}}
+<div class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100"></div>
+
+    <div class="relative">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                入社予定
+            </h3>
+            <div class="p-2 bg-blue-100 rounded-lg">📅</div>
+        </div>
+
+        <div class="text-3xl font-bold text-gray-900">
+            {{ $scheduledEmployees }}
+        </div>
+    </div>
+</div>
+
+{{-- 入社済 --}}
+<div class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 group-hover:opacity-100"></div>
+
+    <div class="relative">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                入社済
+            </h3>
+            <div class="p-2 bg-green-100 rounded-lg">✅</div>
+        </div>
+
+        <div class="text-3xl font-bold text-gray-900">
+            {{ $joinedEmployees }}
+        </div>
+    </div>
+</div>
+
+{{-- 辞退 --}}
+<div class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent opacity-0 group-hover:opacity-100"></div>
+
+    <div class="relative">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                辞退
+            </h3>
+            <div class="p-2 bg-red-100 rounded-lg">❌</div>
+        </div>
+
+        <div class="text-3xl font-bold text-gray-900">
+            {{ $declinedEmployees }}
+        </div>
+    </div>
+</div>
+                {{-- ユーザー管理 --}}
         <a href="/users" class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition block">
             <div class="relative">
                 <h3 class="text-sm font-semibold text-gray-600 mb-2">ユーザー管理</h3>
@@ -167,6 +241,26 @@
             <p class="text-xs text-gray-500 mt-2">
                 PCの管理画面へ
             </p>
+
+        </a>
+
+        {{-- 入社予定者管理 --}}
+        <a href="{{ route('new-employees') }}"
+           class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition block">
+
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100"></div>
+
+            <div class="relative">
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">
+                    入社予定者管理
+                </h3>
+
+                <div class="text-3xl">🧑‍💼</div>
+
+                <p class="text-xs text-gray-500 mt-2">
+                    入社予定者の管理画面へ
+                </p>
+            </div>
 
         </a>
 

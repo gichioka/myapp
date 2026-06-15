@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Livewire\NewEmployeeManager\NewEmployeeManager;
 // Livewire
 use App\Livewire\Dashboard;
 use App\Livewire\Users\UserList;
@@ -49,4 +49,8 @@ Route::middleware(['auth'])->group(function () {
     // PC在庫管理
     Route::get('/products', ProductManager::class)
         ->name('products');
+
+    // 新規従業員管理
+    Route::get('/new-employees', NewEmployeeManager::class)
+        ->name('new-employees');
 });
