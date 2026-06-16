@@ -1,8 +1,9 @@
-<?php  
+<?php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ToolUsage extends Model
 {
@@ -10,10 +11,11 @@ class ToolUsage extends Model
         'user_id',
         'tool_name',
         'version',
+        'category',
         'memo',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
