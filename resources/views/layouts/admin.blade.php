@@ -76,6 +76,15 @@
                 <span class="font-medium">新入社員管理</span>
             </a>
 
+            <a href="/retirements"
+               class="block px-4 py-3 rounded-lg text-gray-100 hover:bg-gray-700 transition duration-200 flex items-center gap-3 
+                      {{ request()->is('retirements') ? 'bg-blue-600' : '' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                <span class="font-medium">退職者管理</span>
+            </a>
+
             <a href="/server-accounts"
                class="block px-4 py-3 rounded-lg text-gray-100 hover:bg-gray-700 transition duration-200 flex items-center gap-3 
                       {{ request()->is('server-accounts') ? 'bg-blue-600' : '' }}">
@@ -107,6 +116,8 @@
                         PC管理
                     @elseif(request()->is('new-employees'))
                         新入社員管理
+                    @elseif(request()->is('retirements'))
+                        退職者管理
                     @elseif(request()->is('server-accounts'))
                         サーバーアカウント管理
                     @else

@@ -32,7 +32,6 @@
             <input type="password" wire:model="password" placeholder="パスワード"
                 class="px-4 py-3 border border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none shadow-sm transition">
             @endif
-            {{-- ✅ 部署を追加 --}}
             <input type="text" wire:model="department" placeholder="部署"
                 class="px-4 py-3 border border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none shadow-sm transition">
             <select wire:model="employment_type"
@@ -46,13 +45,6 @@
 
         <textarea wire:model="comment" placeholder="コメント"
             class="w-full mt-4 px-4 py-3 border border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none shadow-sm transition"></textarea>
-
-        <div class="flex items-center mt-4">
-            <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" wire:model="is_retired" class="w-5 h-5 text-indigo-600 rounded transition">
-                <span class="ml-2 text-gray-700 font-medium">退職済み</span>
-            </label>
-        </div>
 
         <div class="flex gap-3 mt-6">
             @if($editingUserId)

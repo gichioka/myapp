@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -38,6 +39,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
+            'is_retired'        => 'boolean',
         ];
     }
 
@@ -50,39 +52,46 @@ class User extends Authenticatable
             ->implode('');
     }
 
+    /**
+     * 退職情報へのリレーション（1対1）
+     */
+    public function retirement(): HasOne
+    {
+        return $this->hasOne(Retirement::class);
+    }
+
     public function serverAccounts()
     {
         return $this->hasMany(ServerAccount::class);
     }
-    
+
     public function toolUsages()
     {
         return $this->hasMany(ToolUsage::class);
     }
-    
+
     public function products(): HasMany
     {
-    return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 
     public function integrations()
     {
-    return $this->hasMany(Integration::class);
+        return $this->hasMany(Integration::class);
     }
 
-    public function clouds()   
+    public function clouds()
     {
-    return $this->integrations()->where('type', 'cloud');
+        return $this->integrations()->where('type', 'cloud');
     }
 
     public function redmines()
     {
-    return $this->integrations()->where('type', 'redmine');
+        return $this->integrations()->where('type', 'redmine');
     }
 
     public function slacks()
     {
-    return $this->integrations()->where('type', 'slack');
+        return $this->integrations()->where('type', 'slack');
     }
-
-    }
+}

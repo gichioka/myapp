@@ -12,7 +12,7 @@ class UserList extends Component
     use WithPagination;
 
     public $search = '';
-    public $name, $email, $password, $department = '', $employment_type = '正社員', $is_retired = false, $comment = '';
+    public $name, $email, $password, $department = '', $employment_type = '正社員', $comment = '';
     public $editingUserId = null;
 
     protected $rules = [
@@ -44,7 +44,6 @@ class UserList extends Component
             'password'        => bcrypt($this->password),
             'department'      => $this->department,
             'employment_type' => $this->employment_type,
-            'is_retired'      => $this->is_retired,
             'comment'         => $this->comment,
         ]);
 
@@ -61,7 +60,6 @@ class UserList extends Component
         $this->email           = $user->email;
         $this->department      = $user->department;
         $this->employment_type = $user->employment_type;
-        $this->is_retired      = $user->is_retired;
         $this->comment         = $user->comment;
     }
 
@@ -82,7 +80,6 @@ class UserList extends Component
             'email'           => $this->email,
             'department'      => $this->department,
             'employment_type' => $this->employment_type,
-            'is_retired'      => $this->is_retired,
             'comment'         => $this->comment,
         ]);
 
@@ -108,7 +105,6 @@ class UserList extends Component
         $this->password        = '';
         $this->department      = '';
         $this->employment_type = '正社員';
-        $this->is_retired      = false;
         $this->comment         = '';
         $this->editingUserId   = null;
     }

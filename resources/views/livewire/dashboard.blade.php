@@ -261,7 +261,25 @@
                     入社予定者の管理画面へ
                 </p>
             </div>
+            
+{{-- 退職者管理 --}}
+        <a href="{{ route('retirements') }}"
+           class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition block">
 
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-0 group-hover:opacity-100"></div>
+
+            <div class="relative">
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">
+                    退職者管理
+                </h3>
+
+                <div class="text-3xl">🚪</div>
+
+                <p class="text-xs text-gray-500 mt-2">
+                    退職者の管理画面へ
+                </p>
+            </div>
+         </a>
         </a>
 
     </div>

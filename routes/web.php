@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Livewire\NewEmployeeManager\NewEmployeeManager;
 use App\Livewire\Dashboard;
+use App\Livewire\Retirements\RetirementManager;
 use App\Livewire\Users\UserList;
 use App\Livewire\ToolUsages\ToolUsageList;
 use App\Livewire\IntegrationManager\IntegrationManager;
@@ -22,4 +23,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/server-accounts', Manager::class)->name('server-accounts');
     Route::get('/products', ProductManager::class)->name('products');  // ← ここ！
     Route::get('/new-employees', NewEmployeeManager::class)->name('new-employees');
+    Route::get('/retirements', RetirementManager::class)->name('retirements');
 });
