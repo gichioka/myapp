@@ -30,12 +30,14 @@
                 <th class="p-2 text-left">社員名</th>
                 <th class="p-2 text-left">退職日</th>
                 <th class="p-2 text-left">ステータス</th>
+                <th class="p-2 text-left">使用PC</th>
                 <th class="p-2 text-left">PC返却</th>
                 <th class="p-2 text-left">PC初期化可能日</th>
                 <th class="p-2 text-center">LDAP</th>
                 <th class="p-2 text-center">GitHub</th>
                 <th class="p-2 text-center">Slack</th>
                 <th class="p-2 text-center">Email</th>
+                <th class="p-2 text-left">備考</th>
                 <th class="p-2 text-left">操作</th>
             </tr>
         </thead>
@@ -58,6 +60,7 @@
                             } }}
                         </span>
                     </td>
+                    <td class="p-2">{{ $retirement->used_pc_info ?: '-' }}</td>
                     <td class="p-2">
                         {{ match($retirement->pc_return_status) {
                             'unreturned' => '未返却',
@@ -89,6 +92,11 @@
                             </button>
                         </td>
                     @endforeach
+
+                    {{-- 備考 --}}
+                    <td class="p-2 max-w-xs truncate" title="{{ $retirement->note }}">
+                        {{ $retirement->note ?: '-' }}
+                    </td>
 
                     <td class="p-2 space-x-2">
                         <button wire:click="openEditModal({{ $retirement->id }})" class="text-blue-600 hover:underline">編集</button>
