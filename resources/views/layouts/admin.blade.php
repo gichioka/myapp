@@ -58,6 +58,16 @@
                 <span class="font-medium">連携管理</span>
             </a>
 
+            {{-- ★追加：開発アカウント管理メニュー --}}
+            <a href="/developer-accounts"
+               class="block px-4 py-3 rounded-lg text-gray-100 hover:bg-gray-700 transition duration-200 flex items-center gap-3 
+                      {{ request()->is('developer-accounts') ? 'bg-blue-600' : '' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                <span class="font-medium">開発アカウント管理</span>
+            </a>
+
             <a href="/products"
                class="block px-4 py-3 rounded-lg text-gray-100 hover:bg-gray-700 transition duration-200 flex items-center gap-3 
                       {{ request()->is('products') ? 'bg-blue-600' : '' }}">
@@ -112,6 +122,8 @@
                         ツール管理
                     @elseif(request()->is('integrations'))
                         連携管理
+                    @elseif(request()->is('developer-accounts')) {{-- ★追加 --}}
+                        開発アカウント管理
                     @elseif(request()->is('products'))
                         PC管理
                     @elseif(request()->is('new-employees'))

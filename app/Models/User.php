@@ -52,9 +52,6 @@ class User extends Authenticatable
             ->implode('');
     }
 
-    /**
-     * 退職情報へのリレーション（1対1）
-     */
     public function retirement(): HasOne
     {
         return $this->hasOne(Retirement::class);
@@ -93,5 +90,34 @@ class User extends Authenticatable
     public function slacks()
     {
         return $this->integrations()->where('type', 'slack');
+    }
+
+    /* =========================================================================
+     * 専用テーブル（developer_accounts）への個別リレーション（1対多）
+     * ========================================================================= */
+
+    public function developerAccounts(): HasMany
+    {
+        return $this->hasMany(DeveloperAccount::class);
+    }
+
+    public function githubAccounts(): HasMany
+    {
+        return $this->hasMany(DeveloperAccount::class)->where('tool_type', 'github');
+    }
+
+    public function svnAccounts(): HasMany
+    {
+        return $this->hasMany(DeveloperAccount::class)->where('tool_type', 'svn');
+    }
+
+    public function redmineAccounts(): HasMany
+    {
+        return $this->hasMany(DeveloperAccount::class)->where('tool_type', 'redmine');
+    }
+
+    public function dockerAccounts(): HasMany
+    {
+        return $this->hasMany(DeveloperAccount::class)->where('tool_type', 'docker');
     }
 }

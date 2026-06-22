@@ -6,9 +6,11 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\NewEmployee;
+use App\Models\DeveloperAccount; // ★追加
 
 class Dashboard extends Component
 {
+    // 既存のプロパティ
     public $totalUsers;
     public $retiredUsers;
 
@@ -20,6 +22,13 @@ class Dashboard extends Component
     public $scheduledEmployees;
     public $joinedEmployees;
     public $declinedEmployees;
+
+    // ★追加：開発アカウント用のプロパティ
+    public $totalDevAccounts;
+    public $githubAccounts;
+    public $dockerAccounts;
+    public $redmineAccounts;
+    public $svnAccounts;
 
     public function mount()
     {
@@ -58,6 +67,29 @@ class Dashboard extends Component
         $this->declinedEmployees = NewEmployee::where(
             'status',
             '辞退'
+        )->count();
+
+        // ★追加：開発アカウントの集計ロジック
+        $this->totalDevAccounts = DeveloperAccount::count();
+        
+        $this->githubAccounts = DeveloperAccount::where(
+            'tool_type', 
+            'github'
+        )->count();
+        
+        $this->dockerAccounts = DeveloperAccount::where(
+            'tool_type', 
+            'docker'
+        )->count();
+        
+        $this->redmineAccounts = DeveloperAccount::where(
+            'tool_type', 
+            'redmine'
+        )->count();
+        
+        $this->svnAccounts = DeveloperAccount::where(
+            'tool_type', 
+            'svn'
         )->count();
     }
 
