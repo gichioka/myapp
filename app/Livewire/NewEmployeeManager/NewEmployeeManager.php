@@ -43,7 +43,6 @@ class NewEmployeeManager extends Component
         'remarks' => 'nullable|string',
     ];
 
-    // 重要な修正: livewire v3ではupdatedプロパティ名
     public function updatedSearch()
     {
         $this->resetPage();
@@ -211,6 +210,6 @@ class NewEmployeeManager extends Component
             'employees' => $employees,
             'stats' => $this->stats,
             'departments' => $this->departments,
-        ]);
+        ])->layout('layouts.admin');
     }
 }

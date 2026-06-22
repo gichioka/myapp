@@ -140,6 +140,6 @@ class ProductManager extends Component
         return view('livewire.product.product-manager', [
             'products' => $products,
             'users' => $this->users,  // ← ビューにusersを渡す
-        ]);
+        ])->layout('layouts.admin');
     }
 }

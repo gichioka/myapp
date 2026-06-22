@@ -26,13 +26,15 @@ class Manager extends Component
     protected function rules()
     {
         return [
-            'category' => 'required|string|max:255',
-            'label' => 'required|string|max:255',
+            'category'     => 'required|string|max:255',
+            'label'        => 'required|string|max:255',
             'account_name' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
-            'password' => $this->isEditing ? 'nullable|string' : 'required|string',
-            'host' => 'nullable|string|max:255',
-            'note' => 'nullable|string',
+            'user_id'      => 'required|exists:users,id',
+            'password'     => $this->isEditing
+                ? 'nullable|string'
+                : 'required|string',
+            'host'         => 'nullable|string|max:255',
+            'note'         => 'nullable|string',
         ];
     }
 
@@ -46,10 +48,14 @@ class Manager extends Component
             ->get();
 
         return view('livewire.server-account.manager', [
-            'accounts' => $accounts,
-            'categories' => ServerAccount::distinct()->pluck('category'),
-            'users' => User::orderBy('name')->get(),
-        ]);
+            'accounts'   => $accounts,
+            'categories' => ServerAccount::query()
+                ->select('category')
+                ->distinct()
+                ->pluck('category'),
+            'users'      => User::orderBy('name')->get(),
+        ])
+        ->layout('layouts.admin'); // ← adminレイアウト
     }
 
     public function save()
@@ -57,35 +63,46 @@ class Manager extends Component
         $this->validate();
 
         try {
+
             $data = [
-                'category' => $this->category,
-                'label' => $this->label,
+                'category'     => $this->category,
+                'label'        => $this->label,
                 'account_name' => $this->account_name,
-                'user_id' => $this->user_id,
-                'host' => $this->host,
-                'note' => $this->note,
+                'user_id'      => $this->user_id,
+                'host'         => $this->host,
+                'note'         => $this->note,
             ];
 
-            if ($this->password) {
+            if (!empty($this->password)) {
                 $data['password'] = bcrypt($this->password);
             }
 
             if ($this->isEditing) {
-                ServerAccount::findOrFail($this->editingId)->update($data);
+
+                ServerAccount::findOrFail($this->editingId)
+                    ->update($data);
+
                 session()->flash('message', '更新しました');
+
             } else {
+
                 ServerAccount::create($data);
+
                 session()->flash('message', '追加しました');
             }
 
             $this->resetForm();
 
-            // モーダル閉じる
             $this->dispatch('close-modal');
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+
             Log::error($e);
-            session()->flash('error', 'エラーが発生しました');
+
+            session()->flash(
+                'error',
+                'エラーが発生しました'
+            );
         }
     }
 
@@ -93,7 +110,7 @@ class Manager extends Component
     {
         $account = ServerAccount::findOrFail($id);
 
-        $this->editingId = $id;
+        $this->editingId = $account->id;
         $this->isEditing = true;
 
         $this->category = $account->category;
@@ -110,7 +127,11 @@ class Manager extends Component
     public function delete($id)
     {
         ServerAccount::findOrFail($id)->delete();
-        session()->flash('message', '削除しました');
+
+        session()->flash(
+            'message',
+            '削除しました'
+        );
     }
 
     public function resetForm()

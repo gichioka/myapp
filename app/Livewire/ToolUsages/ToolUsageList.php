@@ -147,6 +147,6 @@ class ToolUsageList extends Component
             // 一時的に0を返す
             'devTools' => 0,
             'designTools' => 0,
-        ]);
+        ])->layout('layouts.admin');
     }
 }
