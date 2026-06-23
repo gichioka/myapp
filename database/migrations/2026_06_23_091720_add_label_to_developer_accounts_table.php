@@ -8,20 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // 1. 外部キーを一旦落とす（ユニークインデックスがこれに使われているため）
-        Schema::table('developer_accounts', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-        });
-
-        // 2. ユニーク制約を削除
-        Schema::table('developer_accounts', function (Blueprint $table) {
-            $table->dropUnique('developer_accounts_user_id_tool_type_unique');
-        });
-
-        // 3. 外部キーを再作成 + labelカラムを追加
         Schema::table('developer_accounts', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('label')->nullable()->after('tool_type');
         });
     }
 
@@ -29,7 +17,6 @@ return new class extends Migration
     {
         Schema::table('developer_accounts', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
-            $table->dropColumn('label');
         });
 
         Schema::table('developer_accounts', function (Blueprint $table) {
