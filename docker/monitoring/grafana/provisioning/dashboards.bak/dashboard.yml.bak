@@ -1,0 +1,27 @@
+apiVersion: 1
+
+
+###########################################################
+# Dashboard Provider
+###########################################################
+
+providers:
+
+  - name: "Laravel Monitoring"
+
+    orgId: 1
+
+    folder: "Laravel"
+
+    type: file
+
+    disableDeletion: false
+
+    editable: true
+
+    allowUiUpdates: true
+
+
+    options:
+
+      path: /var/lib/grafana/dashboards
