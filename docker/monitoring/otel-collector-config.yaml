@@ -1,54 +1,98 @@
 receivers:
+
   otlp:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
+
       http:
         endpoint: 0.0.0.0:4318
 
+
+  filelog:
+    include:
+      - /var/log/laravel/laravel.log
+
+    start_at: beginning
+
+    multiline:
+      line_start_pattern: '^\[\d{4}-\d{2}-\d{2}'
+
+
 processors:
+
+  resource:
+    attributes:
+      - key: service.name
+        value: laravel
+        action: upsert
+
+
   batch:
 
+
 exporters:
+
   otlp/tempo:
     endpoint: tempo:4317
+
     tls:
       insecure: true
+
 
   prometheus:
     endpoint: "0.0.0.0:9464"
 
+
   otlphttp/loki:
     endpoint: http://loki:3100/otlp
+
 
   debug:
     verbosity: detailed
 
+
+
 service:
+
   pipelines:
+
+
     traces:
       receivers:
         - otlp
+
       processors:
         - batch
+
       exporters:
         - otlp/tempo
         - debug
 
+
+
     metrics:
       receivers:
         - otlp
+
       processors:
         - batch
+
       exporters:
         - prometheus
         - debug
 
+
+
     logs:
       receivers:
         - otlp
+        - filelog
+
       processors:
+        - resource
         - batch
+
       exporters:
         - otlphttp/loki
         - debug
