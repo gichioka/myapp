@@ -1,4 +1,4 @@
-<?php
+php artisan migrate:status<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('developer_accounts', function (Blueprint $table) {
-            $table->string('label')->nullable();
+            $table->string('label')->nullable()->after('tool_type');
         });
     }
 
