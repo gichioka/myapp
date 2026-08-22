@@ -9,19 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('developer_accounts', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('label')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('developer_accounts', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-        });
-
-        Schema::table('developer_accounts', function (Blueprint $table) {
-            $table->unique(['user_id', 'tool_type']);
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->dropColumn('label');
         });
     }
 };
