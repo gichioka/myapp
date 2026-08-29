@@ -1,3 +1,3 @@
 人事、社内システム、クラウドとslackの管理、重要アカウントの整備したwebアプリケーション、PC在庫管理のwebアプリケーションです。
 
-opentelemetry途中まで。
+opentelemetry完了。
