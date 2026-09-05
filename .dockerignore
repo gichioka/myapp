@@ -1,0 +1,8 @@
+.git/
+.env
+/vendor/
+/node_modules/
+/public/build/
+/public/hot
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore

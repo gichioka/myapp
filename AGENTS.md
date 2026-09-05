@@ -12,6 +12,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - php - 8.3.6
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v13
+- laravel/octane (OCTANE) - v2
 - laravel/prompts (PROMPTS) - v0
 - livewire/flux (FLUXUI_FREE) - v2
 - livewire/livewire (LIVEWIRE) - v4
@@ -27,6 +28,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 This project has domain-specific skills available. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
 
+- `octane-development` — Use this skill when working with Laravel Octane, a long-running PHP worker server (Swoole, FrankenPHP, RoadRunner) where the application boots once and serves many requests instead of rebooting for each request like PHP-FPM. Trigger when installing Octane or starting its server; configuring or detecting the active driver for driver-specific code; using Octane::concurrently(), Octane::table(), the Octane cache, or shared in-memory state across workers; controlling worker memory growth; or testing Octane behavior. Skip plain PHP-FPM applications with no persistent worker.
 - `fluxui-development` — Develops UIs with Flux UI Free components. Activates when creating buttons, forms, modals, inputs, dropdowns, checkboxes, or UI components; replacing HTML form elements with Flux; working with flux: components; or when the user mentions Flux, component library, UI components, form fields, or asks about available Flux components.
 - `livewire-development` — Develops reactive Livewire 4 components. Activates when creating, updating, or modifying Livewire components; working with wire:model, wire:click, wire:loading, or any wire: directives; adding real-time updates, loading states, or reactivity; debugging component behavior; writing Livewire tests; or when the user mentions Livewire, component, counter, or reactive UI.
 - `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
@@ -196,6 +198,18 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ## Vite Error
 
 - If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
+
+=== octane/core rules ===
+
+# Laravel Octane
+
+This application uses Laravel Octane, a long-running PHP server. The application bootstraps once and handles many requests within the same process.
+
+- Never store request-specific state in singletons or static properties, because it can leak across requests.
+- Use `config('octane.server')` to detect the active driver (`swoole`, `roadrunner`, or `frankenphp`).
+- Prefer scoped bindings (`$this->app->scoped()`) over singletons for per-request services.
+
+When working on Octane-specific features (concurrency, shared tables, memory, driver configuration, testing), invoke `octane-development` for detailed rules.
 
 === fluxui-free/core rules ===
 

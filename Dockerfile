@@ -1,48 +1,74 @@
-FROM php:8.3-cli
+FROM dunglas/frankenphp:php8.3
 
-WORKDIR /var/www/html
-
-# 必要パッケージ
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    curl \
-    libzip-dev \
-    autoconf \
-    gcc \
-    make \
-    pkg-config \
-    && docker-php-ext-install pdo_mysql zip \
-    && pecl install opentelemetry \
-    && docker-php-ext-enable opentelemetry \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Composer
+RUN install-php-extensions \
+    pdo_mysql \
+    gd \
+    pcntl \
+    zip \
+    bcmath \
+    opcache \
+    opentelemetry
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+RUN { \
+    echo 'opcache.enable=1'; \
+    echo 'opcache.enable_cli=1'; \
+    echo 'opcache.validate_timestamps=0'; \
+    echo 'opcache.max_accelerated_files=20000'; \
+    echo 'opcache.memory_consumption=256'; \
+} > "$PHP_INI_DIR/conf.d/opcache-recommended.ini"
+
+RUN php -m | grep -i opentelemetry \
+    && php --ri opentelemetry
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# OpenTelemetry が本当に有効になっているか確認
-RUN php -m | grep -i opentelemetry
-RUN php --ri opentelemetry
+WORKDIR /app
 
-# Azure MySQL 用 CA 証明書
-RUN curl -L https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem \
-    -o /var/www/html/DigiCertGlobalRootG2.crt.pem
+COPY composer.json composer.lock ./
 
-# Laravel プロジェクト
-COPY . .
-
-# ローカルの .env はイメージに入れない
-RUN rm -f .env
-
-# Composer
 RUN composer install \
+    --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --no-scripts \
+    --no-autoloader
 
-# Laravel の書き込み権限
-RUN chown -R www-data:www-data storage bootstrap/cache
+COPY . .
+
+RUN rm -f bootstrap/cache/*.php
+
+RUN composer dump-autoload \
+    --optimize \
+    --no-dev
+
+RUN mkdir -p \
+        storage/framework/cache \
+        storage/framework/sessions \
+        storage/framework/views \
+        storage/logs \
+        bootstrap/cache
+
+RUN chown -R www-data:www-data \
+        /app/storage \
+        /app/bootstrap/cache \
+    && chmod -R 775 \
+        /app/storage \
+        /app/bootstrap/cache
+
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    OTEL_SERVICE_NAME=myapp \
+    OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000", "--workers=auto", "--max-requests=500"]

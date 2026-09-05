@@ -2,23 +2,39 @@ services:
   app:
     build:
       context: .
-      dockerfile: docker/php/Dockerfile
+      dockerfile: Dockerfile
+
     container_name: laravel-app
-    working_dir: /var/www/html
+
+    working_dir: /app
+
     volumes:
-      - ./:/var/www/html
+      - ./:/app
+
+    ports:
+      - "8000:8000"
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    restart: unless-stopped
 
-  nginx:
-    image: nginx:1.28-alpine
-    container_name: laravel-nginx
-    ports:
-      - "8080:80"
-    volumes:
-      - ./:/var/www/html
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - app
+    environment:
+      APP_NAME: Laravel
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+
+      DB_CONNECTION: mysql
+      DB_HOST: host.docker.internal
+      DB_PORT: 3306
+      DB_DATABASE: myapp_db
+      DB_USERNAME: laravel
+      DB_PASSWORD: mypass123!!
+      
+      MYSQL_ATTR_SSL_CA: ""
+
+      OTEL_SDK_DISABLED: "false"
+      OTEL_SERVICE_NAME: myapp
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://host.docker.internal:4318
+
     restart: unless-stopped
