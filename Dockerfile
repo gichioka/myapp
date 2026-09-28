@@ -7,6 +7,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+
 RUN install-php-extensions \
     pdo_mysql \
     gd \
@@ -43,6 +44,12 @@ RUN composer install \
     --no-autoloader
 
 COPY . .
+
+# ★ ローカルの .env が本番環境に混入するのを防ぐために削除（ConfigMap のみを正しく読み込ませるため）
+RUN rm -f .env
+
+# ローカルでビルドしたViteの成果物をコンテナに確実に同梱
+COPY --chown=www-data:www-data public/build public/build
 
 RUN rm -f bootstrap/cache/*.php
 
