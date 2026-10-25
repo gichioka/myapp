@@ -10,6 +10,9 @@ services:
 
     volumes:
       - ./:/app
+      # ホスト側の権限競合とファイルロックを防ぐために名前付きボリュームをオーバーレイ
+      - storage_data:/app/storage
+      - vendor_data:/app/vendor
 
     ports:
       - "8000:8000"
@@ -38,3 +41,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: http://host.docker.internal:4318
 
     restart: unless-stopped
+
+volumes:
+  storage_data:
+  vendor_data:
