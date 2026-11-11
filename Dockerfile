@@ -105,17 +105,7 @@ RUN rm -f .env bootstrap/cache/*.php
 # 静的ビルド成果物のみを配置
 COPY --from=frontend-builder --chown=www-data:www-data /app/public/build public/build
 
-# 最適化 Autoloader の生成
-RUN composer dump-autoload \
-    --optimize \
-    --no-dev \
-    --classmap-authoritative
-
-# ビルド後に Composer を削除（コンテナ攻撃面の縮小）
-RUN rm /usr/bin/composer
-
-# ディレクトリ作成と権限設定
-# Octane のサーバー状態ファイル保存先 (storage/logs) を確実に作成・権限付与
+# 必要なディレクトリの作成と権限設定（ルート権限で実行）
 RUN mkdir -p \
         storage/framework/cache/data \
         storage/framework/sessions \
@@ -129,6 +119,15 @@ RUN mkdir -p \
         /app/storage \
         /app/bootstrap/cache
 
+# 最適化 Autoloader の生成（ルート権限で実行）
+RUN composer dump-autoload \
+    --optimize \
+    --no-dev \
+    --classmap-authoritative
+
+# ビルド後に Composer を削除（コンテナ攻撃面の縮小）
+RUN rm /usr/bin/composer
+
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
@@ -137,8 +136,7 @@ ENV APP_ENV=production \
 
 EXPOSE 8000
 
-# 【GKEセキュリティ標準】非特権ユーザー（UID/GID 33: www-data）で実行
+# 【GKEセキュリティ標準】すべてのビルド処理が完了した後に非特権ユーザーへ切り替え
 USER www-data
 
-# オプションを正規のものに修正
 CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000", "--workers=auto", "--max-requests=500"]

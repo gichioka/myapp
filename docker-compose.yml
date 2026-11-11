@@ -3,23 +3,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     container_name: laravel-app
-
     working_dir: /app
-
     volumes:
       - ./:/app
-      # ホスト側の権限競合とファイルロックを防ぐために名前付きボリュームをオーバーレイ
       - storage_data:/app/storage
-      - vendor_data:/app/vendor
-
+      # vendor_data を除外することで、ホストとコンテナのcomposer管理を一致させます
     ports:
       - "8000:8000"
-
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
     environment:
       APP_NAME: Laravel
       APP_ENV: local
@@ -35,13 +28,7 @@ services:
       
       MYSQL_ATTR_SSL_CA: ""
 
-      OTEL_SDK_DISABLED: "false"
-      OTEL_SERVICE_NAME: myapp
-      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://host.docker.internal:4318
-
     restart: unless-stopped
 
 volumes:
   storage_data:
-  vendor_data:
